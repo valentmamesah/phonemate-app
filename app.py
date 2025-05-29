@@ -22,7 +22,7 @@ from datetime import datetime
 import hashlib
 
 # Configuration with environment variable support
-API_KEY = st.secrets.get("OPENROUTER_API_KEY", "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")
+API_KEY = st.secrets.get("OPENROUTER_API_KEY", "sk-or-default-fallback")
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "mistralai/mistral-nemo:free"
 
