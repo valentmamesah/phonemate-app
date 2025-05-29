@@ -458,90 +458,114 @@ class VisualizationEngine:
 
     @staticmethod
     def create_comparison_chart(df: pd.DataFrame) -> None:
-        """Create enhanced comparison chart"""
-        if len(df) < 2:
-            st.warning("Butuh minimal 2 HP untuk dibandingkan.")
-            return
+        """Create enhanced comparison chart with better error handling"""
+        try:
+            if len(df) < 2:
+                st.warning("Butuh minimal 2 HP untuk dibandingkan.")
+                return
 
-        # Take top 3 phones for comparison
-        top_phones = df.head(3)
+            # Take top 3 phones for comparison
+            top_phones = df.head(3)
 
-        features = ["RAM", "Back Camera MP", "Battery Extracted", "Price", "Weight", "Screen Size"]
-        labels = ["RAM (GB)", "Kamera (MP)", "Baterai (mAh)", "Harga (IDR)", "Berat (g)", "Layar (inci)"]
+            features = ["RAM", "Back Camera MP", "Battery Extracted", "Price", "Weight", "Screen Size"]
+            labels = ["RAM (GB)", "Kamera (MP)", "Baterai (mAh)", "Harga (IDR)", "Berat (g)", "Layar (inci)"]
 
-        # Create subplots
-        fig = make_subplots(
-            rows=2, cols=3,
-            subplot_titles=labels,
-            specs=[[{"secondary_y": False} for _ in range(3)] for _ in range(2)]
-        )
+            # Create subplots
+            fig = make_subplots(
+                rows=2, cols=3,
+                subplot_titles=labels,
+                specs=[[{"secondary_y": False} for _ in range(3)] for _ in range(2)]
+            )
 
-        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD']
+            colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD']
 
-        for i, (feature, label) in enumerate(zip(features, labels)):
-            row = (i // 3) + 1
-            col = (i % 3) + 1
+            for i, (feature, label) in enumerate(zip(features, labels)):
+                row = (i // 3) + 1
+                col = (i % 3) + 1
 
-            for idx, (_, phone) in enumerate(top_phones.iterrows()):
-                phone_name = f"{phone['Company Name']} {phone['Model Name']}"
-                value = phone[feature] if pd.notna(phone[feature]) else 0
+                for idx, (_, phone) in enumerate(top_phones.iterrows()):
+                    phone_name = f"{phone['Company Name']} {phone['Model Name']}"
+                    value = phone[feature] if pd.notna(phone[feature]) else 0
 
-                fig.add_trace(
-                    go.Bar(
-                        x=[phone_name],
-                        y=[value],
-                        name=phone_name if i == 0 else None,
-                        marker_color=colors[idx % len(colors)],
-                        text=f"{value:.0f}",
-                        textposition='auto',
-                        showlegend=(i == 0),
-                        legendgroup=f"phone_{idx}"
-                    ),
-                    row=row, col=col
-                )
+                    # Format value based on feature type
+                    if feature == "Price":
+                        display_value = f"{value/1000000:.1f}M"
+                    else:
+                        display_value = f"{value:.0f}"
 
-        fig.update_layout(
-            title_text='📊 Perbandingan Spesifikasi Detail',
-            height=600,
-            showlegend=True,
-            template='plotly_white',
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
+                    fig.add_trace(
+                        go.Bar(
+                            x=[phone_name[:15] + "..." if len(phone_name) > 15 else phone_name],
+                            y=[value],
+                            name=phone_name if i == 0 else None,
+                            marker_color=colors[idx % len(colors)],
+                            text=display_value,
+                            textposition='auto',
+                            showlegend=(i == 0),
+                            legendgroup=f"phone_{idx}"
+                        ),
+                        row=row, col=col
+                    )
 
-        st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(
+                title_text='📊 Perbandingan Spesifikasi Detail',
+                height=600,
+                showlegend=True,
+                template='plotly_white',
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            )
+
+            # Update x-axis to prevent overlapping labels
+            fig.update_xaxes(tickangle=45)
+
+            st.plotly_chart(fig, use_container_width=True)
+
+        except Exception as e:
+            st.error(f"Error creating comparison chart: {str(e)}")
+            st.info("Menampilkan data dalam format tabel sebagai alternatif:")
+            
+            # Fallback table display
+            comparison_data = df.head(3)[['Company Name', 'Model Name', 'RAM', 'Back Camera MP', 
+                                        'Battery Extracted', 'Price', 'Weight', 'Screen Size']]
+            st.dataframe(comparison_data)
 
     @staticmethod
     def create_price_performance_scatter(df: pd.DataFrame) -> None:
-        """Create price vs performance scatter plot"""
-        if len(df) < 5:
-            return
+        """Create price vs performance scatter plot with error handling"""
+        try:
+            if len(df) < 5:
+                return
 
-        # Calculate performance score
-        df_viz = df.copy()
-        df_viz['Performance Score'] = (
-            df_viz['RAM'] * 0.3 +
-            df_viz['Back Camera MP'] * 0.2 +
-            df_viz['Battery Extracted'] / 100 * 0.3 +
-            (2025 - df_viz['Launched Year']) * -2 * 0.2  # Newer is better
-        )
+            # Calculate performance score
+            df_viz = df.copy()
+            df_viz['Performance Score'] = (
+                df_viz['RAM'] * 0.3 +
+                df_viz['Back Camera MP'] * 0.2 +
+                df_viz['Battery Extracted'] / 100 * 0.3 +
+                (2025 - df_viz['Launched Year']) * -2 * 0.2  # Newer is better
+            )
 
-        fig = px.scatter(
-            df_viz.head(15),
-            x='Price',
-            y='Performance Score',
-            size='Screen Size',
-            color='Company Name',
-            hover_name='Model Name',
-            hover_data=['RAM', 'Back Camera MP', 'Battery Extracted'],
-            title='📈 Analisis Harga vs Performa',
-            labels={
-                'Price': 'Harga (IDR)',
-                'Performance Score': 'Skor Performa'
-            }
-        )
+            fig = px.scatter(
+                df_viz.head(15),
+                x='Price',
+                y='Performance Score',
+                size='Screen Size',
+                color='Company Name',
+                hover_name='Model Name',
+                hover_data=['RAM', 'Back Camera MP', 'Battery Extracted'],
+                title='📈 Analisis Harga vs Performa',
+                labels={
+                    'Price': 'Harga (IDR)',
+                    'Performance Score': 'Skor Performa'
+                }
+            )
 
-        fig.update_layout(template='plotly_white', height=500)
-        st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(template='plotly_white', height=500)
+            st.plotly_chart(fig, use_container_width=True)
+
+        except Exception as e:
+            st.error(f"Error creating scatter plot: {str(e)}")
+            st.info("Scatter plot tidak dapat ditampilkan karena keterbatasan data.")
 
 def main():
     """Enhanced main application"""
@@ -657,7 +681,7 @@ def main():
 
 def render_dashboard(df: pd.DataFrame):
     """Render enhanced dashboard"""
-    st.markdown('<p class="header-text">Dashboard PhoneMate AI</p>', unsafe_allow_html=True)
+    st.markdown('<p class="header-text">Dashboard PhoneMate</p>', unsafe_allow_html=True)
 
     if df.empty:
         st.error("Data tidak tersedia.")
@@ -744,6 +768,20 @@ def render_search_page(df: pd.DataFrame, smart_filter: SmartFilter, ai_engine: A
 def render_ai_search(df: pd.DataFrame, smart_filter: SmartFilter, ai_engine: AIRecommendationEngine, viz_engine: VisualizationEngine):
     """Render AI-powered search interface"""
     st.markdown("### 🤖 Pencarian dengan AI")
+
+    # Perbaikan: Inisialisasi session state yang lebih konsisten
+    if 'ai_search_results' not in st.session_state:
+        st.session_state.ai_search_results = pd.DataFrame()
+    if 'ai_search_applied' not in st.session_state:
+        st.session_state.ai_search_applied = False
+    if 'ai_query' not in st.session_state:
+        st.session_state.ai_query = ""
+    # Tambahan: session state untuk menyimpan parameter AI
+    if 'ai_params' not in st.session_state:
+        st.session_state.ai_params = {}
+    if 'ai_recommendation_text' not in st.session_state:
+        st.session_state.ai_recommendation_text = ""
+
     st.markdown("Jelaskan kebutuhan HP Anda dalam bahasa natural, AI akan memahami dan memberikan rekomendasi terbaik!")
 
     # Example queries
@@ -787,19 +825,48 @@ def render_ai_search(df: pd.DataFrame, smart_filter: SmartFilter, ai_engine: AIR
                 if not filtered_df.empty:
                     # Generate AI recommendation summary
                     recommendation_text = ai_engine.generate_recommendation_summary(extracted_params, filtered_df)
+                    
+                    # Perbaikan: Simpan semua hasil dalam session state
+                    st.session_state.ai_search_results = filtered_df
+                    st.session_state.ai_search_applied = True
+                    st.session_state.ai_query = user_query
+                    st.session_state.ai_params = extracted_params
+                    st.session_state.ai_recommendation_text = recommendation_text
+
                     st.markdown(f"### 💡 Rekomendasi AI")
                     st.info(recommendation_text)
 
-                    # Display results
-                    display_search_results(filtered_df, viz_engine, user_query)
                 else:
                     st.warning("❌ Tidak ada HP yang sesuai dengan kriteria Anda. Coba ubah parameter pencarian.")
+                    # Reset session state jika tidak ada hasil
+                    st.session_state.ai_search_applied = False
+                    st.session_state.ai_search_results = pd.DataFrame()
             else:
                 st.error("❌ Maaf, AI tidak dapat memahami permintaan Anda. Silakan coba dengan kalimat yang lebih spesifik.")
+                # Reset session state jika AI gagal memahami
+                st.session_state.ai_search_applied = False
+                st.session_state.ai_search_results = pd.DataFrame()
+
+    # Perbaikan: Tampilkan hasil jika sudah ada pencarian sebelumnya
+    if st.session_state.ai_search_applied and not st.session_state.ai_search_results.empty:
+        # Tampilkan rekomendasi AI jika ada
+        if st.session_state.ai_recommendation_text:
+            st.markdown(f"### 💡 Rekomendasi AI")
+            st.info(st.session_state.ai_recommendation_text)
+        
+        display_search_results(st.session_state.ai_search_results, viz_engine, st.session_state.ai_query)
 
 def render_manual_filter(df: pd.DataFrame, smart_filter: SmartFilter, viz_engine: VisualizationEngine):
-    """Render manual filter interface"""
+    """Render manual filter interface with fixed state management"""
     st.markdown("### ⚙️ Filter Manual")
+
+    # Initialize session state for filters if not exists
+    if 'filter_applied' not in st.session_state:
+        st.session_state.filter_applied = False
+    if 'filtered_results' not in st.session_state:
+        st.session_state.filtered_results = pd.DataFrame()
+    if 'filter_params' not in st.session_state:
+        st.session_state.filter_params = {}
 
     with st.form("manual_filter_form"):
         col1, col2, col3 = st.columns(3)
@@ -843,15 +910,28 @@ def render_manual_filter(df: pd.DataFrame, smart_filter: SmartFilter, viz_engine
             (df['Launched Year'] <= year_range[1])
         ].sort_values('Price')
 
-        if not filtered_df.empty:
-            display_search_results(filtered_df, viz_engine, "Filter Manual")
-        else:
-            st.warning("❌ Tidak ada HP yang sesuai dengan filter Anda. Coba ubah kriteria pencarian.")
+        # Store results in session state
+        st.session_state.filtered_results = filtered_df
+        st.session_state.filter_applied = True
+        st.session_state.filter_params = {
+            'ram': ram_filter,
+            'price_range': (min_price, max_price),
+            'camera': camera_min,
+            'battery': battery_min,
+            'screen': screen_min,
+            'year_range': year_range
+        }
+
+    # Display results if filter has been applied
+    if st.session_state.filter_applied and not st.session_state.filtered_results.empty:
+        display_search_results(st.session_state.filtered_results, viz_engine, "Filter Manual")
+    elif st.session_state.filter_applied and st.session_state.filtered_results.empty:
+        st.warning("❌ Tidak ada HP yang sesuai dengan filter Anda. Coba ubah kriteria pencarian.")
 
 def display_search_results(df: pd.DataFrame, viz_engine: VisualizationEngine, query: str):
-    """Display search results with enhanced formatting"""
+    """Display search results with enhanced formatting - FIXED VERSION"""
     st.markdown(f"### 📱 Hasil Pencarian ({len(df)} HP ditemukan)")
-
+    
     # Results summary
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -862,19 +942,30 @@ def display_search_results(df: pd.DataFrame, viz_engine: VisualizationEngine, qu
     with col3:
         price_range = df['Price'].max() - df['Price'].min()
         st.metric("Range Harga", f"Rp {price_range/1000000:.1f}M")
-
-    # Display options
-    view_type = st.radio("Tampilan:", ["📋 List", "📊 Perbandingan"], horizontal=True)
-
+    
+    # Perbaikan: Gunakan key yang unik dan konsisten berdasarkan query dan jumlah hasil
+    import hashlib
+    # Buat key yang unik berdasarkan query dan hash dari dataframe
+    df_hash = hashlib.md5(str(df.shape).encode()).hexdigest()[:8]
+    query_hash = hashlib.md5(str(query).encode()).hexdigest()[:8]
+    unique_key = f"view_type_{query_hash}_{df_hash}"
+    
+    view_type = st.radio("Tampilan:", ["📋 List", "📊 Perbandingan"], 
+                        horizontal=True, key=unique_key)
+    
     if view_type == "📋 List":
         display_phone_list(df)
-    else:
+    else:  # Perbandingan
         if len(df) >= 2:
+            st.markdown("### 📊 Perbandingan Spesifikasi")
             viz_engine.create_comparison_chart(df)
+            
+            # Tambahan: Tampilkan scatter plot jika data cukup
             if len(df) >= 5:
+                st.markdown("### 📈 Analisis Harga vs Performa") 
                 viz_engine.create_price_performance_scatter(df)
         else:
-            st.warning("Butuh minimal 2 HP untuk perbandingan.")
+            st.warning("⚠️ Butuh minimal 2 HP untuk perbandingan. Menampilkan dalam format list.")
             display_phone_list(df)
 
 def display_phone_cards(df: pd.DataFrame):
@@ -960,14 +1051,14 @@ def create_detailed_phone_card(phone, rank):
 
 def render_analytics_page(df: pd.DataFrame, viz_engine: VisualizationEngine):
     """Render analytics page"""
-    st.markdown('<p class="header-text">📊 Analytics & Insights</p>', unsafe_allow_html=True)
+    st.markdown('<p class="header-text">Analytics & Insights</p>', unsafe_allow_html=True)
 
     if df.empty:
         st.error("Data tidak tersedia untuk analisis.")
         return
 
     # Analytics tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Tren Pasar", "🏆 Brand Analysis", "💰 Price Analysis", "⚡ Performance Metrics"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📈 Tren Pasar", "🏆 Brand Analysis", "💰 Price Analysis", "⚡ Performance"])
 
     with tab1:
         render_market_trends(df)
@@ -1045,7 +1136,8 @@ def render_brand_analysis(df: pd.DataFrame):
         # Average price by brand
         fig_bar = px.bar(brand_stats.head(10), x='Company Name', y='Price_mean',
                         title='Rata-rata Harga per Brand')
-        fig_bar.update_xaxis(tickangle=45)
+        # Perbaikan: gunakan update_layout bukan update_xaxis
+        fig_bar.update_layout(xaxis={'tickangle': 45})
         st.plotly_chart(fig_bar, use_container_width=True)
 
 def render_price_analysis(df: pd.DataFrame):
@@ -1054,8 +1146,11 @@ def render_price_analysis(df: pd.DataFrame):
 
     # Price distribution
     fig_hist = px.histogram(df, x='Price', nbins=30, title='Distribusi Harga Smartphone')
-    fig_hist.update_xaxis(title='Harga (IDR)')
-    fig_hist.update_yaxis(title='Jumlah Model')
+    # Perbaikan: gunakan update_layout bukan update_xaxis/update_yaxis
+    fig_hist.update_layout(
+        xaxis_title='Harga (IDR)',
+        yaxis_title='Jumlah Model'
+    )
     st.plotly_chart(fig_hist, use_container_width=True)
 
     # Price vs specifications correlation
@@ -1101,7 +1196,7 @@ def render_performance_metrics(df: pd.DataFrame):
 
 def render_about_page():
     """Render about page"""
-    st.markdown('<p class="header-text">ℹ️ Tentang PhoneMate AI</p>', unsafe_allow_html=True)
+    st.markdown('<p class="header-text">Tentang PhoneMate</p>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([2, 1])
 
@@ -1109,7 +1204,7 @@ def render_about_page():
         st.markdown("""
         ### 🚀 Tentang Aplikasi
 
-        **PhoneMate AI** adalah aplikasi rekomendasi smartphone yang menggunakan kecerdasan buatan
+        **PhoneMate AI** adalah aplikasi rekomendasi smartphone yang memanfaatkan kecerdasan buatan
         untuk membantu Anda menemukan HP yang sesuai dengan kebutuhan dan budget.
 
         ### ✨ Fitur Utama:
@@ -1117,16 +1212,15 @@ def render_about_page():
         - **📊 Advanced Analytics**: Analisis mendalam tentang pasar smartphone
         - **🔄 Real-time Comparison**: Bandingkan spesifikasi secara detail
         - **💡 Smart Recommendations**: Rekomendasi personal berdasarkan kebutuhan
-        - **📱 Responsive Design**: Optimal di semua device
 
         ### 🛠️ Teknologi:
         - **Streamlit**: Framework aplikasi web
-        - **OpenRouter API**: AI engine untuk pemahaman bahasa natural
+        - **OpenRouter API**: LLM engine untuk pemahaman bahasa natural
         - **Plotly**: Visualisasi data interaktif
         - **Pandas**: Manipulasi dan analisis data
 
         ### 📈 Dataset:
-        Aplikasi ini menggunakan dataset smartphone terbaru dengan lebih dari 9000+ model
+        Aplikasi ini menggunakan dataset smartphone terbaru dengan lebih dari 800+ model
         dari berbagai brand populer dengan spesifikasi lengkap dan harga terkini.
         """)
 
@@ -1134,9 +1228,12 @@ def render_about_page():
         st.markdown("""
         ### 📞 Kontak
 
-        **Developer**: PhoneMate Team
-        **Email**: Capstone2@student.telkomuniversity.ac.id
+        **Developer**: Team 28 Capstone Data Science
+
+        **Email**: capstone28@student.telkomuniversity.ac.id
+
         **Version**: 2.0
+        
         **Last Update**: 2025
 
         ### ⭐ Rating
