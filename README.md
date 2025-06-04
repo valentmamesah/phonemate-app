@@ -2,7 +2,7 @@
 
 PhoneMate AI adalah aplikasi web berbasis AI yang membantu pengguna menemukan smartphone yang tepat sesuai kebutuhan dan budget mereka. Aplikasi ini menggunakan pemrosesan bahasa natural (NLP) untuk memahami permintaan pengguna dalam bahasa sehari-hari dan memberikan rekomendasi yang akurat.
 
-**🌐 Live Demo**: [https://phonemate-app-khjy6uqhhi4j9fvx2jzhj.streamlit.app/](https://phonemate-app-khjy6uqhhi4j9fvx2jzhj.streamlit.app/)
+**🌐 Live Demo**: [[https://phonemate-app-khjy6uqhhi4j9fvx2jzhj.streamlit.app/](https://phonemate-app-khjy6uqhhi4j9fvx2jzhj.streamlit.app/)](https://phonemate-app-khjv6uqhhi4ij9fvx2jzhj.streamlit.app/?embed_options=light_theme,show_toolbar)
 
 ## 🚀 Fitur Utama
 
