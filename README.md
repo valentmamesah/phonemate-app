@@ -1,6 +1,6 @@
 # 📱 PhoneMate - Smart Smartphone Recommendation App
 
-PhoneMate adalah aplikasi web diperkuat oleh implementasi LLM yang membantu pengguna menemukan smartphone yang tepat sesuai kebutuhan dan budget mereka. Aplikasi ini menggunakan pemrosesan bahasa natural (NLP) untuk memahami permintaan pengguna dalam bahasa sehari-hari dan memberikan rekomendasi yang akurat.
+PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengguna menemukan smartphone yang tepat sesuai kebutuhan dan budget mereka. Aplikasi ini menggunakan pemrosesan bahasa natural (NLP) untuk memahami permintaan pengguna dalam bahasa sehari-hari dan memberikan rekomendasi yang akurat.
 
 **🌐 Live Demo**: https://phonemate-app-khjv6uqhhi4ij9fvx2jzhj.streamlit.app/?embed_options=light_theme,show_toolbar
 
