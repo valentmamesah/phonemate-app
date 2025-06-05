@@ -1,4 +1,4 @@
-# 📱 PhoneMate - Smart Smartphone Recommendation App
+# 📱 PhoneMate - Smartphone Recommendation 
 
 PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengguna menemukan smartphone yang tepat sesuai kebutuhan dan budget mereka. Aplikasi ini menggunakan pemrosesan bahasa natural (NLP) untuk memahami permintaan pengguna dalam bahasa sehari-hari dan memberikan rekomendasi yang akurat.
 
