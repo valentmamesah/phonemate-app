@@ -4,7 +4,7 @@ PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengg
 
 **🌐 Live Demo**: https://phonemate-app-khjv6uqhhi4ij9fvx2jzhj.streamlit.app/?embed_options=light_theme,show_toolbar
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 ### AI-Powered Natural Language Search
 - **Input Natural**: "HP gaming RAM 8GB harga 5 juta"
