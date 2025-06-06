@@ -6,28 +6,28 @@ PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengg
 
 ## 🚀 Fitur Utama
 
-### 🤖 AI-Powered Natural Language Search
+### AI-Powered Natural Language Search
 - **Input Natural**: "HP gaming RAM 8GB harga 5 juta"
 - **AI Understanding**: Mistral AI menganalisis dan mengekstrak parameter
 - **Smart Filtering**: Otomatis menerapkan filter berdasarkan pemahaman AI
 - **Intelligent Fallback**: Sistem fallback berbasis keyword jika AI gagal
 
-### 📊 Advanced Analytics & Visualization
+### Advanced Analytics & Visualization
 - **Market Trends**: Analisis tren pasar smartphone per tahun
 - **Brand Analysis**: Market share dan perbandingan brand
 - **Price Analysis**: Distribusi harga dan korelasi spesifikasi
 - **Performance Metrics**: Sistem scoring dan ranking performa
 
-### 🔍 Dual Search System
+### Dual Search System
 - **AI Search**: Pencarian menggunakan bahasa natural
 - **Manual Filter**: Filter tradisional dengan form dan slider
 
-### 📈 Interactive Visualizations
+### Interactive Visualizations
 - **Comparison Charts**: Perbandingan spesifikasi detail
 - **Scatter Plots**: Analisis harga vs performa
 - **Bar Charts & Pie Charts**: Berbagai metrik dan statistik
 
-## 🛠️ Teknologi Stack
+## Teknologi Stack
 
 ### Backend & AI
 - **Python 3.8+**: Bahasa pemrograman utama
@@ -46,7 +46,7 @@ PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengg
 - **JSON Processing**: Structured data handling
 - **Data Cleaning**: Outlier removal dan normalization
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur Sistem
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
@@ -61,7 +61,7 @@ PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengg
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-## 📊 Workflow AI System
+## Workflow AI System
 
 ### 1. Input Processing
 **User**: "HP gaming RAM 8GB harga 5 juta"
@@ -85,7 +85,7 @@ PhoneMate adalah aplikasi web diperkuat oleh implementasi AI yang membantu pengg
 - Interactive visualizations
 - Detailed comparison charts
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -148,7 +148,7 @@ OPENROUTER_API_KEY = "sk-or-v1-your-api-key-here"
 
 **Catatan**: API key untuk production sudah dikonfigurasi melalui Streamlit Cloud secrets, bukan file lokal.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 phonemate-app/
@@ -161,7 +161,7 @@ phonemate-app/
     └── secrets.toml      # API keys (local development only)
 ```
 
-## 🎯 Core Classes & Functions
+## Core Classes & Functions
 
 ### PhoneDataManager
 - Dataset loading dan preprocessing
@@ -184,7 +184,7 @@ phonemate-app/
 - Comparison visualizations
 - Performance analytics
 
-## 📊 Dataset Requirements
+## Dataset Requirements
 
 Dataset harus mengandung kolom:
 - **Company Name**: Brand smartphone
@@ -197,7 +197,7 @@ Dataset harus mengandung kolom:
 - **Screen Size**: Ukuran layar
 - **Launched Year**: Tahun rilis
 
-## 🔧 Configuration Options
+## Configuration Options
 
 ### AI Model Settings
 ```python
@@ -210,7 +210,7 @@ MODEL = "mistralai/mistral-nemo:free"  # Free tier
 - `max_retries`: Maximum retry untuk API calls
 - `cache_enabled`: Enable/disable result caching
 
-## 🚦 Usage Examples
+## Usage Examples
 
 ### Natural Language Queries
 ✅ "HP gaming RAM 8GB harga 5 juta"  
@@ -227,7 +227,7 @@ MODEL = "mistralai/mistral-nemo:free"  # Free tier
 - **Layar**: Minimum inch
 - **Tahun**: Range tahun rilis
 
-## 🔍 API Integration
+## API Integration
 
 ### OpenRouter Integration
 ```python
@@ -250,14 +250,14 @@ body = {
 - Graceful fallback ke keyword-based search
 - Comprehensive logging dan error reporting
 
-## 📈 Performance Optimization
+## Performance Optimization
 
 - **Caching**: Result caching untuk query yang sama
 - **Lazy Loading**: Data loading on-demand
 - **Progressive Filtering**: Efficient dataset filtering
 - **Session State**: Persistent state management
 
-## 🚀 Deployment
+## Deployment
 
 ### Streamlit Cloud (Recommended)
 1. Fork repository ini
@@ -271,7 +271,7 @@ body = {
 3. Setup API key di `.streamlit/secrets.toml`
 4. Run: `streamlit run app.py`
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
