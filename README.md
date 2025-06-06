@@ -124,7 +124,7 @@ echo 'OPENROUTER_API_KEY = "your-openrouter-api-key"' > .streamlit/secrets.toml
 streamlit run app.py
 ```
 
-## 🔑 API Configuration
+## API Configuration
 
 ### Local Development
 Aplikasi menggunakan OpenRouter API dengan Mistral AI Nemo (Free):
@@ -279,7 +279,7 @@ body = {
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Mistral AI** for the powerful language model
 - **OpenRouter** for API infrastructure
