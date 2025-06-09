@@ -570,7 +570,7 @@ class VisualizationEngine:
 def main():
     """Enhanced main application"""
     st.set_page_config(
-        page_title="PhoneMate - AI Phone Recommendations",
+        page_title="PickAPhone - AI Phone Recommendations",
         page_icon="📱",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -649,7 +649,7 @@ def main():
 
     # Sidebar
     with st.sidebar:
-        st.markdown("# 📱 PhoneMate AI")
+        st.markdown("# 📱 PickAPhone AI")
         st.markdown("---")
 
         page = st.radio(
@@ -681,7 +681,7 @@ def main():
 
 def render_dashboard(df: pd.DataFrame):
     """Render enhanced dashboard"""
-    st.markdown('<p class="header-text">Dashboard PhoneMate</p>', unsafe_allow_html=True)
+    st.markdown('<p class="header-text">Dashboard PickAPhone</p>', unsafe_allow_html=True)
 
     if df.empty:
         st.error("Data tidak tersedia.")
@@ -1196,7 +1196,7 @@ def render_performance_metrics(df: pd.DataFrame):
 
 def render_about_page():
     """Render about page"""
-    st.markdown('<p class="header-text">Tentang PhoneMate</p>', unsafe_allow_html=True)
+    st.markdown('<p class="header-text">Tentang PickAPhone</p>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([2, 1])
 
@@ -1204,7 +1204,7 @@ def render_about_page():
         st.markdown("""
         ### 🚀 Tentang Aplikasi
 
-        **PhoneMate AI** adalah aplikasi rekomendasi smartphone yang memanfaatkan kecerdasan buatan
+        **PickAPhone AI** adalah aplikasi rekomendasi smartphone yang memanfaatkan kecerdasan buatan
         untuk membantu Anda menemukan HP yang sesuai dengan kebutuhan dan budget.
 
         ### ✨ Fitur Utama:
