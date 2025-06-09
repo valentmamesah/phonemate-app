@@ -1204,7 +1204,7 @@ def render_about_page():
         st.markdown("""
         ### 🚀 Tentang Aplikasi
 
-        **PickAPhone AI** adalah aplikasi rekomendasi smartphone yang memanfaatkan kecerdasan buatan
+        **PickAPhone** adalah aplikasi rekomendasi smartphone yang memanfaatkan kecerdasan buatan
         untuk membantu Anda menemukan HP yang sesuai dengan kebutuhan dan budget.
 
         ### ✨ Fitur Utama:
