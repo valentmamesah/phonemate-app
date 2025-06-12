@@ -41,7 +41,6 @@ class PhoneDataManager:
     def load_phone_data(_self) -> pd.DataFrame:
         """Load and preprocess mobile phone data with comprehensive error handling"""
         try:
-            # Try multiple possible file locations
             possible_files = [
                 "Mobiles Dataset (2025).csv",
                 "data/Mobiles Dataset (2025).csv",
