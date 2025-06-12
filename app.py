@@ -938,10 +938,10 @@ def display_search_results(df: pd.DataFrame, viz_engine: VisualizationEngine, qu
         st.metric("Total HP", len(df))
     with col2:
         avg_price = df['Price'].mean()
-        st.metric("Rata-rata Harga", f"Rp {avg_price/1000000:.1f}M")
+        st.metric("Rata-rata Harga", f"Rp {avg_price/1000000:.1f}Jt")
     with col3:
         price_range = df['Price'].max() - df['Price'].min()
-        st.metric("Range Harga", f"Rp {price_range/1000000:.1f}M")
+        st.metric("Range Harga", f"Rp {price_range/1000000:.1f}Jt")
     
     # Perbaikan: Gunakan key yang unik dan konsisten berdasarkan query dan jumlah hasil
     import hashlib
@@ -984,7 +984,7 @@ def display_phone_list(df: pd.DataFrame):
 
 def create_phone_card(phone):
     """Create individual phone card"""
-    price_formatted = f"Rp {phone['Price']/1000000:.1f}M" if phone['Price'] > 0 else "N/A"
+    price_formatted = f"Rp {phone['Price']/1000000:.1f}Jt" if phone['Price'] > 0 else "N/A"
 
     st.markdown(f"""
     <div class="phone-card">
@@ -1009,7 +1009,7 @@ def create_phone_card(phone):
 
 def create_detailed_phone_card(phone, rank):
     """Create detailed phone card with ranking"""
-    price_formatted = f"Rp {phone['Price']/1000000:.1f}M" if phone['Price'] > 0 else "N/A"
+    price_formatted = f"Rp {phone['Price']/1000000:.1f}Jt" if phone['Price'] > 0 else "N/A"
 
     with st.container():
         st.markdown(f"""
